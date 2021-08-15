@@ -70,7 +70,7 @@ BranchPlugin.prototype.apply = function (compiler) {
         } catch (e) { }
 
         if (commit || name || email || date || message) {
-            versionStr = `最近一次提交：\ngit：${commit}\n作者：${name}<${email}>\n日期：${date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()}\n说明：${message}\n${new Array(80).join("*")}\n`;
+            versionStr = `最近一次提交：\n作者：${name}<${email}>\n日期：${date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()}\nmessage：${message}\ncommitId：${commit}\n${new Array(80).join("*")}\n`;
         }
 
         // 系统信息

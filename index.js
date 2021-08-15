@@ -86,7 +86,7 @@ BranchPlugin.prototype.apply = function (compiler) {
         } catch (e) {}
 
         if (commit || name || email || date || message) {
-            versionStr = "\u6700\u8FD1\u4E00\u6B21\u63D0\u4EA4\uFF1A\ngit\uFF1A" + commit + "\n\u4F5C\u8005\uFF1A" + name + "<" + email + ">\n\u65E5\u671F\uFF1A" + (date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()) + "\n\u8BF4\u660E\uFF1A" + message + "\n" + new Array(80).join("*") + "\n";
+            versionStr = "\u6700\u8FD1\u4E00\u6B21\u63D0\u4EA4\uFF1A\n\u4F5C\u8005\uFF1A" + name + "<" + email + ">\n\u65E5\u671F\uFF1A" + (date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()) + "\nmessage\uFF1A" + message + "\ncommitId\uFF1A" + commit + "\n" + new Array(80).join("*") + "\n";
         }
 
         // 系统信息
