@@ -41,13 +41,21 @@ BranchPlugin.prototype.apply = function (compiler) {
             userName = "\n",
             mailName = "\n",
             publishTime = "\n",
-            publishStr = "\n";
+            publishStr = "\n",
+            subBranchInfo = '';
 
         try {
             commandInfo = process.env["npm_lifecycle_script"].toString().trim();
         } catch (e) {}
         try {
             branchInfo = execSync("git rev-parse --abbrev-ref HEAD");
+        } catch (e) {}
+
+        try {
+            subBranchInfo = execSync("git config --file .gitmodules --get-regexp '^submodule..*.branch$'");
+            if (subBranchInfo) {
+                subBranchInfo = '子模块分支:' + subBranchInfo;
+            }
         } catch (e) {}
         try {
             userName = execSync("git config user.name");
@@ -59,7 +67,7 @@ BranchPlugin.prototype.apply = function (compiler) {
             publishTime = dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
         } catch (e) {}
 
-        publishStr = "\u8D44\u6E90\u5305\u63D0\u4F9B\u8005\uFF1A" + userName + "\u6267\u884C\u811A\u672C\uFF1A" + commandInfo + "\n\u90AE\u7BB1\uFF1A" + mailName + "\u751F\u6210\u65E5\u671F\uFF1A" + publishTime + "\n\u53D1\u5E03\u5206\u652F\uFF1A" + branchInfo + new Array(80).join("*") + "\n";
+        publishStr = "\u8D44\u6E90\u5305\u63D0\u4F9B\u8005\uFF1A" + userName + "\u6267\u884C\u811A\u672C\uFF1A" + commandInfo + "\n\u90AE\u7BB1\uFF1A" + mailName + "\u751F\u6210\u65E5\u671F\uFF1A" + publishTime + "\n\u53D1\u5E03\u5206\u652F\uFF1A" + branchInfo + subBranchInfo + new Array(80).join("*") + "\n";
 
         // 最后一次提交记录信息
         var commit = "",

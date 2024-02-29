@@ -32,13 +32,20 @@ const BranchPlugin = function (options) {
 BranchPlugin.prototype.apply = function (compiler) {
     compiler.hooks.afterEmit.tap("branch-plugin", () => {
         // 发布信息
-        let [branchInfo, commandInfo, userName, mailName, publishTime, publishStr] = ["\n", "\n", "\n", "\n", "\n", "\n"];
+        let [branchInfo, commandInfo, userName, mailName, publishTime, publishStr,subBranchInfo] = ["\n", "\n", "\n", "\n", "\n", "\n",''];
         try {
             commandInfo = process.env["npm_lifecycle_script"].toString().trim();
         } catch (e) { }
         try {
             branchInfo = execSync("git rev-parse --abbrev-ref HEAD");
         } catch (e) { }
+
+        try {
+            subBranchInfo = execSync("git config --file .gitmodules --get-regexp '^submodule..*.branch$'");
+            if (subBranchInfo) {
+                subBranchInfo = '子模块分支:' + subBranchInfo;
+            }
+        } catch (e) {}
         try {
             userName = execSync("git config user.name");
         } catch (e) { }
@@ -49,7 +56,7 @@ BranchPlugin.prototype.apply = function (compiler) {
             publishTime = dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
         } catch (e) { }
 
-        publishStr = `资源包提供者：${userName}执行脚本：${commandInfo}\n邮箱：${mailName}生成日期：${publishTime}\n发布分支：${branchInfo}${new Array(80).join("*")}\n`;
+        publishStr = `资源包提供者：${userName}执行脚本：${commandInfo}\n邮箱：${mailName}生成日期：${publishTime}\n发布分支：${branchInfo}${subBranchInfo}${new Array(80).join("*")}\n`;
 
         // 最后一次提交记录信息
         let [commit, name, email, date, message, versionStr] = ["", "", "", "", "", ""];
