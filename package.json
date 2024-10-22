@@ -1,6 +1,6 @@
 {
   "name": "@tntd/webpack-branch-plugin",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "记录分支日志信息",
   "main": "index.min.js",
   "scripts": {

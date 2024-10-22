@@ -67,14 +67,18 @@ module.exports = function (proxy, { open, distPath }) {
 
           if (contentType.includes('application/json')) {
             // 处理其他类型的响应，例如JSON
-            const filePath = path.join(distPath, url + '.js');
-            fs.writeFile(
-              filePath,
-              `module.exports = ${JSON.stringify(JSON.parse(body), null, 2)}`,
-              (err) => {
-                saveEntry(err, url);
-              }
-            );
+            try {
+              const filePath = path.join(distPath, url + '.js');
+              fs.writeFile(
+                filePath,
+                `module.exports = ${JSON.stringify(JSON.parse(body), null, 2)}`,
+                (err) => {
+                  saveEntry(err, url);
+                }
+              );
+            } catch (err) {
+              console.error('保存响应数据时出错:', err);
+            }
           } else if (contentType.includes('application/octet-stream')) {
             const contentDisposition = proxyRes.headers['content-disposition'];
             const pathList = url.split('/').filter((i) => !!i);
