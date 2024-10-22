@@ -2,6 +2,7 @@ const execSync = require("child_process").execSync;
 const fs = require("fs");
 const path = require("path");
 const os = require('os');
+const cacheData = require('./cacheData');
 
 // 格式化时间
 const dateFormat = (fmt, date) => {
@@ -127,5 +128,7 @@ BranchPlugin.prototype.apply = function (compiler) {
         } catch (e) { }
     });
 };
+
+BranchPlugin.cacheData = cacheData
 
 module.exports = BranchPlugin;

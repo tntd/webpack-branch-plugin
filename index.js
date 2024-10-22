@@ -4,6 +4,7 @@ var execSync = require("child_process").execSync;
 var fs = require("fs");
 var path = require("path");
 var os = require('os');
+var cacheData = require('./cacheData');
 
 // 格式化时间
 var dateFormat = function dateFormat(fmt, date) {
@@ -157,5 +158,7 @@ BranchPlugin.prototype.apply = function (compiler) {
         } catch (e) {}
     });
 };
+
+BranchPlugin.cacheData = cacheData;
 
 module.exports = BranchPlugin;
