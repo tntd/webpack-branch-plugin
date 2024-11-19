@@ -1,6 +1,6 @@
 {
   "name": "@tntd/webpack-branch-plugin",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "记录分支日志信息",
   "main": "index.min.js",
   "scripts": {
@@ -12,5 +12,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "uglify-js": "^3.14.1"
+  },
+  "dependencies": {
+    "zlib": "^1.0.5"
   }
 }

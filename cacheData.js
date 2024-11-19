@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const zlib = require('zlib');
 
 const dirCache = {};
 
@@ -37,10 +38,7 @@ module.exports = function (proxy, { open, distPath }) {
     } else {
       if (!mockData[url]) {
         mockData[url] = url.slice(1);
-        fs.writeFileSync(
-          rootPath,
-          `module.exports = ${JSON.stringify(mockData, null, 2)}`
-        );
+        fs.writeFileSync(rootPath, `module.exports = ${JSON.stringify(mockData, null, 2)}`);
       }
     }
   };
@@ -53,11 +51,23 @@ module.exports = function (proxy, { open, distPath }) {
         const contentType = proxyRes.headers['content-type'];
         const url = req.originalUrl.split('?')[0];
         let body = [];
+        // 添加对压缩数据的处理
+        const isGzipped = proxyRes.headers['content-encoding'] === 'gzip';
+        if (isGzipped) {
+          proxyRes.pipe(zlib.createGunzip());
+        }
+
         proxyRes.on('data', (chunk) => {
           body.push(chunk);
         });
         proxyRes.on('end', () => {
           body = Buffer.concat(body);
+
+          // 如果是gzip压缩的数据，需要解压
+          if (isGzipped) {
+            body = zlib.gunzipSync(body);
+          }
+
           const fileDistPath = path.join(distPath, url);
 
           if (!fs.existsSync(fileDistPath)) {
@@ -84,7 +94,7 @@ module.exports = function (proxy, { open, distPath }) {
             const pathList = url.split('/').filter((i) => !!i);
             fs.writeFileSync(path.join(distPath, url + '_'), body);
             fs.writeFile(
-              path.join( distPath, url + '.js'),
+              path.join(distPath, url + '.js'),
               `const fs = require('fs');
 const path = require('path');
 
