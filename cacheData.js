@@ -61,7 +61,7 @@ module.exports = function (proxy, { open, distPath }) {
       ...proxy[key],
       onProxyRes: (proxyRes, req) => {
         // 数据类型
-        const contentType = proxyRes.headers['content-type'];
+        const contentType = proxyRes.headers['content-type'] || '';
         const url = req.originalUrl.split('?')[0];
         let body = [];
         // 添加对压缩数据的处理
